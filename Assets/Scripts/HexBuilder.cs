@@ -6,8 +6,9 @@ public class HexBuilder : MonoBehaviour
     private GameObject hexPrefab;
     
     private float SIZE = 0.5f; // 중심점부터 육각형의 꼭짓점까지의 거리 
-    private float HORIZONTAL_SPACING = 1.5f;
-    private float VERTICAL_SPACING = Mathf.Sqrt(3f);
+
+    private Vector3 Q_BASE_VECTOR = new Vector3(1.5f, -Mathf.Sqrt(3f) / 2, 0f);
+    private Vector3 R_BASE_VECTOR = new Vector3(0f, -Mathf.Sqrt(3f), 0f);
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -27,30 +28,8 @@ public class HexBuilder : MonoBehaviour
     }
 
     void CreateHex(int q, int r)
-    {
-        int s = -q - r;
-        
-        float x = 0f;
-        float y = 0f;
-        
-        /*
-         * q가 증가하는 방향 = 0H,1V  
-         */
-        y += VERTICAL_SPACING * q * SIZE;
-        
-        /*
-         * R이 증가하는 방향 = -1H, -1/2V
-         */
-        x += -HORIZONTAL_SPACING * r * SIZE;
-        y += -0.5f *VERTICAL_SPACING * r * SIZE;
-        
-        /*
-         * S이 증가하는 방향 = -1H, 1/2V
-         */
-        x += -HORIZONTAL_SPACING * s * SIZE;
-        y += 0.5f * VERTICAL_SPACING * s * SIZE;
-        
-        Vector3 position = new Vector3(x, y, 0);
+    { 
+        Vector3 position = SIZE * (q * Q_BASE_VECTOR + r * R_BASE_VECTOR);
         Instantiate(hexPrefab, position, Quaternion.identity, transform);
     }
 }
