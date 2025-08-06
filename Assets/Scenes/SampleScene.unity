@@ -148,6 +148,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c8d7272f83f557a4f929dfe1c6622cfa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  x_left: -3
+  x_right: 3
+  y_top: -3
+  y_bottom: 3
   hexPrefab: {fileID: 2519156663791782311, guid: e3280436f1bf26d42a5136252711e867, type: 3}
 --- !u!4 &241936006
 Transform:
