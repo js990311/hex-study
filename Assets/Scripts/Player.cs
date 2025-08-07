@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IClickable
 {
     [SerializeField]
     private int moveSpeed = 3;
@@ -15,5 +15,10 @@ public class Player : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void OnClick()
+    {
+        Debug.Log("OnClick");
     }
 }

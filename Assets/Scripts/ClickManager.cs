@@ -14,12 +14,12 @@ public class ClickManager : MonoBehaviour
             if (hit.collider != null)
             {
                 GameObject obj = hit.collider.gameObject;
-                HexTile tile = obj.GetComponent<HexTile>();
+                IClickable clickable = obj.GetComponent<IClickable>();
 
-                if (tile != null)
+                if (clickable != null)
                 {
-                    tile.OnClick();
-                } 
+                    clickable.OnClick();
+                }
             }
         }
 

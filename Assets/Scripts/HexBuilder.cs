@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class HexBuilder : MonoBehaviour
@@ -9,6 +10,12 @@ public class HexBuilder : MonoBehaviour
     
     [SerializeField]
     private GameObject hexPrefab;
+    
+    [SerializeField]
+    private GameObject playerPrefab;
+    
+    private Dictionary<Vector2Int, HexTile> tilemap = new Dictionary<Vector2Int, HexTile>();
+
     
     private float SIZE = 0.5f; // 중심점부터 육각형의 꼭짓점까지의 거리
 
@@ -25,6 +32,9 @@ public class HexBuilder : MonoBehaviour
                 CreateHex(toAxial(x,y));
             }
         }
+        GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, transform);
+        Player component = player.GetComponent<Player>();
+        tilemap[new Vector2Int(0,0)].SetPlayer(component);
     }
 
     void CreateHex(Vector2Int qr)
@@ -35,7 +45,8 @@ public class HexBuilder : MonoBehaviour
     void CreateHex(int q, int r)
     { 
         Vector3 position = SIZE * (q * Q_BASE_VECTOR + r * R_BASE_VECTOR);
-        Instantiate(hexPrefab, position, Quaternion.identity, transform);
+        GameObject tile = Instantiate(hexPrefab, position, Quaternion.identity, transform);
+        tilemap[new Vector2Int(q,r)] = tile.GetComponent<HexTile>();
     }
 
     Vector2Int toAxial(int x, int y)

@@ -1,9 +1,10 @@
 using UnityEngine;
 
-public class HexTile : MonoBehaviour
+public class HexTile : MonoBehaviour, IClickable
 {
     private SpriteRenderer spriteRenderer;
     private bool _pathable = true;
+    private Player _player;
 
     public bool pathable
     {
@@ -21,15 +22,14 @@ public class HexTile : MonoBehaviour
     {  
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
+    
     public void OnClick()
     {
+        if (_player != null)
+        {
+            _player.OnClick();
+            return;
+        }
         if (pathable)
         {
             spriteRenderer.color = Color.black;
@@ -40,5 +40,10 @@ public class HexTile : MonoBehaviour
             spriteRenderer.color = Color.white;
             pathable = true;
         }
+    }
+
+    public void SetPlayer(Player player)
+    {
+        _player = player;
     }
 }

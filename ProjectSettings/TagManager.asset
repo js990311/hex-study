@@ -44,7 +44,7 @@ TagManager:
   - name: Tile
     uniqueID: 3964895265
     locked: 0
-  - name: User
+  - name: Unit
     uniqueID: 1124896373
     locked: 0
   m_RenderingLayers:
