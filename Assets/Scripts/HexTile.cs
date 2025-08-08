@@ -2,6 +2,13 @@ using UnityEngine;
 
 public class HexTile : MonoBehaviour, IClickable
 {
+    private static Vector2Int[] neighbours = new Vector2Int[]
+    {
+        new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(1,-1),
+        new Vector2Int(-1,0), new Vector2Int(0,-1), new Vector2Int(-1,1),
+    };
+    
+    public Vector2Int position;
     private SpriteRenderer spriteRenderer;
     private bool _pathable = true;
     private Player _player;
@@ -22,9 +29,15 @@ public class HexTile : MonoBehaviour, IClickable
     {  
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
+
+    public void Initalize(int q, int r)
+    {
+        position = new Vector2Int(q, r);
+    }
     
     public void OnClick()
     {
+        Debug.Log(position.ToString());
         if (_player != null)
         {
             _player.OnClick();

@@ -2,23 +2,17 @@ using UnityEngine;
 
 public class Player : MonoBehaviour, IClickable
 {
+    public Vector2Int position;
     [SerializeField]
     private int moveSpeed = 3;
+
+    public void setPosition(Vector2Int position)
+    {
+        this.position = position;
+    }
     
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     public void OnClick()
     {
-        Debug.Log("OnClick");
+        Debug.Log(position.ToString());
     }
 }

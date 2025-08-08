@@ -3,6 +3,14 @@ using UnityEngine;
 
 public class HexBuilder : MonoBehaviour
 {
+
+    private static HexBuilder _instance;
+
+    public static HexBuilder Instance()
+    {
+        return _instance;
+    }
+    
     [SerializeField] private int x_left = -3;
     [SerializeField] private int x_right = 3;
     [SerializeField] private int y_top = -3;
@@ -21,6 +29,11 @@ public class HexBuilder : MonoBehaviour
 
     private Vector3 Q_BASE_VECTOR = new Vector3(1.5f, -Mathf.Sqrt(3f) / 2, 0f);
     private Vector3 R_BASE_VECTOR = new Vector3(0f, -Mathf.Sqrt(3f), 0f);
+
+    void Awake()
+    {
+        _instance = this;
+    }
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -46,7 +59,9 @@ public class HexBuilder : MonoBehaviour
     { 
         Vector3 position = SIZE * (q * Q_BASE_VECTOR + r * R_BASE_VECTOR);
         GameObject tile = Instantiate(hexPrefab, position, Quaternion.identity, transform);
-        tilemap[new Vector2Int(q,r)] = tile.GetComponent<HexTile>();
+        HexTile hexTile = tile.GetComponent<HexTile>();
+        tilemap[new Vector2Int(q,r)] = hexTile; 
+        hexTile.Initalize(q,r);
     }
 
     Vector2Int toAxial(int x, int y)
