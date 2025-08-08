@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class HexBuilder : MonoBehaviour
@@ -70,5 +71,40 @@ public class HexBuilder : MonoBehaviour
         int q = x;
         int r = y - (x - parity) / 2;
         return new Vector2Int(q, r);
+    }
+
+    public void PathFind(Vector2Int position, int speed)
+    {
+        Debug.Log("path find start");
+        HashSet<Vector2Int> isVisited = new HashSet<Vector2Int>();
+        
+        Queue<Vector2Int> queue = new Queue<Vector2Int>();
+        queue.Enqueue(position);
+
+        for (int step = 1; step <= speed; step++)
+        {
+            Queue<Vector2Int> nextQueue = new Queue<Vector2Int>();
+
+            while (queue.Count > 0)
+            {
+                Vector2Int now = queue.Dequeue();
+                foreach (Vector2Int dir in HexTile.neighbours)
+                {
+                    Vector2Int next = now + dir;
+                    if (!tilemap[next].pathable || isVisited.Contains(next)) // 통과 불가능하거나 이미 들렸으면
+                    {
+                        continue;
+                    }
+                    else
+                    {
+                        Debug.Log("next 타일" + next.ToString());
+                        tilemap[next].MoveRange();
+                        isVisited.Add(next);
+                        nextQueue.Enqueue(next);
+                    }
+                }
+            }
+            queue = nextQueue;
+        }
     }
 }

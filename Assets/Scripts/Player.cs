@@ -13,6 +13,7 @@ public class Player : MonoBehaviour, IClickable
     
     public void OnClick()
     {
+        HexBuilder.Instance().PathFind(position, moveSpeed);
         Debug.Log(position.ToString());
     }
 }

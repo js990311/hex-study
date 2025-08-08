@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class HexTile : MonoBehaviour, IClickable
 {
-    private static Vector2Int[] neighbours = new Vector2Int[]
+    public static Vector2Int[] neighbours = new Vector2Int[]
     {
         new Vector2Int(1,0), new Vector2Int(0,1), new Vector2Int(1,-1),
         new Vector2Int(-1,0), new Vector2Int(0,-1), new Vector2Int(-1,1),
@@ -59,4 +59,10 @@ public class HexTile : MonoBehaviour, IClickable
     {
         _player = player;
     }
+
+    public void MoveRange()
+    {
+        spriteRenderer.color = Color.cyan;
+    }
+
 }
