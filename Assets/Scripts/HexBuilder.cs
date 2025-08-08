@@ -24,6 +24,8 @@ public class HexBuilder : MonoBehaviour
     private GameObject playerPrefab;
     
     private Dictionary<Vector2Int, HexTile> tilemap = new Dictionary<Vector2Int, HexTile>();
+    private HashSet<Vector2Int> moveableTileSets = new HashSet<Vector2Int>();
+    private Player focusedPlayer;
 
     
     private float SIZE = 0.5f; // 중심점부터 육각형의 꼭짓점까지의 거리
@@ -49,6 +51,7 @@ public class HexBuilder : MonoBehaviour
         GameObject player = Instantiate(playerPrefab, Vector3.zero, Quaternion.identity, transform);
         Player component = player.GetComponent<Player>();
         tilemap[new Vector2Int(0,0)].SetPlayer(component);
+        component.SetTile(tilemap[new Vector2Int(0,0)]);
     }
 
     void CreateHex(Vector2Int qr)
@@ -73,13 +76,13 @@ public class HexBuilder : MonoBehaviour
         return new Vector2Int(q, r);
     }
 
-    public void PathFind(Vector2Int position, int speed)
+    public void PathFind(Player player, int speed)
     {
-        Debug.Log("path find start");
-        HashSet<Vector2Int> isVisited = new HashSet<Vector2Int>();
+        moveableTileSets = new HashSet<Vector2Int>();
         
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
-        queue.Enqueue(position);
+        focusedPlayer = player;
+        queue.Enqueue(player.position);
 
         for (int step = 1; step <= speed; step++)
         {
@@ -91,20 +94,48 @@ public class HexBuilder : MonoBehaviour
                 foreach (Vector2Int dir in HexTile.neighbours)
                 {
                     Vector2Int next = now + dir;
-                    if (!tilemap[next].pathable || isVisited.Contains(next)) // 통과 불가능하거나 이미 들렸으면
+                    if (!tilemap[next].pathable || moveableTileSets.Contains(next)) // 통과 불가능하거나 이미 들렸으면
                     {
                         continue;
                     }
                     else
                     {
-                        Debug.Log("next 타일" + next.ToString());
-                        tilemap[next].MoveRange();
-                        isVisited.Add(next);
+                        tilemap[next].EnableMove();
+                        moveableTileSets.Add(next);
                         nextQueue.Enqueue(next);
                     }
                 }
             }
             queue = nextQueue;
         }
+    }
+
+    public void MovePlayer(HexTile tile)
+    {
+        Debug.Log("Move Player");
+        tile.SetPlayer(focusedPlayer);
+        focusedPlayer.SetTile(tile);
+        ClearPath();
+    }
+    
+    public void ClearPath()
+    {
+        Debug.Log("clear path");
+        focusedPlayer = null;
+        foreach (Vector2Int position in moveableTileSets)
+        {
+            tilemap[position].DisableMove();
+        }
+        moveableTileSets.Clear();
+    }
+
+    public bool isMovealbePath(Vector2Int position)
+    {
+        return moveableTileSets.Contains(position);
+    }
+    
+    public Vector3 positionToPixel(Vector2Int position)
+    {
+        return SIZE * (position.x * Q_BASE_VECTOR + position.y * R_BASE_VECTOR);
     }
 }

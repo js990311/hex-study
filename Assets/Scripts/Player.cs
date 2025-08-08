@@ -6,14 +6,22 @@ public class Player : MonoBehaviour, IClickable
     [SerializeField]
     private int moveSpeed = 3;
 
-    public void setPosition(Vector2Int position)
+    private HexTile _tile;
+
+    public void SetTile(HexTile tile)
     {
-        this.position = position;
+        if (_tile != null)
+        {
+            _tile.ClearPlayer();
+        }
+        _tile = tile;
+        this.position = tile.position;
+        transform.position = HexBuilder.Instance().positionToPixel(position);
     }
     
     public void OnClick()
     {
-        HexBuilder.Instance().PathFind(position, moveSpeed);
-        Debug.Log(position.ToString());
+        HexBuilder.Instance().ClearPath();
+        HexBuilder.Instance().PathFind(this, moveSpeed);
     }
 }

@@ -12,6 +12,7 @@ public class HexTile : MonoBehaviour, IClickable
     private SpriteRenderer spriteRenderer;
     private bool _pathable = true;
     private Player _player;
+    public bool moveable; 
 
     public bool pathable
     {
@@ -37,21 +38,31 @@ public class HexTile : MonoBehaviour, IClickable
     
     public void OnClick()
     {
-        Debug.Log(position.ToString());
         if (_player != null)
         {
             _player.OnClick();
             return;
         }
-        if (pathable)
+
+        if (HexBuilder.Instance().isMovealbePath(position))
         {
-            spriteRenderer.color = Color.black;
-            pathable = false;
+            Debug.Log("Player 이동가능");
+            HexBuilder.Instance().MovePlayer(this);
         }
         else
         {
-            spriteRenderer.color = Color.white;
-            pathable = true;
+            Debug.Log("Player 이동불가능");
+            HexBuilder.Instance().ClearPath();
+            if (pathable)
+            {
+                spriteRenderer.color = Color.black;
+                pathable = false;
+            }
+            else
+            {
+                spriteRenderer.color = Color.white;
+                pathable = true;
+            }
         }
     }
 
@@ -59,10 +70,21 @@ public class HexTile : MonoBehaviour, IClickable
     {
         _player = player;
     }
-
-    public void MoveRange()
+    
+    public void EnableMove()
     {
+        moveable = true;
         spriteRenderer.color = Color.cyan;
     }
 
+    public void DisableMove()
+    {
+        spriteRenderer.color = Color.white;
+        moveable = false;
+    }
+
+    public void ClearPlayer()
+    {
+        _player = null;
+    }
 }
